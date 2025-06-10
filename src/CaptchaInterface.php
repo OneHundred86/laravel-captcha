@@ -6,9 +6,10 @@ interface CaptchaInterface
 {
     /**
      * 获取验证码
+     * @param array|null $options
      * @return mixed
      */
-    public function acquire();
+    public function acquire($options = null);
 
     /**
      * 验证验证码

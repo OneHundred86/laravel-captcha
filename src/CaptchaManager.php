@@ -2,7 +2,7 @@
 
 namespace Oh86\Captcha;
 
-use Oh86\Captcha\Impls\ImageCaptchaManager;
+use Oh86\Captcha\ImageCaptchaManager;
 use Illuminate\Support\Manager;
 
 class CaptchaManager extends Manager

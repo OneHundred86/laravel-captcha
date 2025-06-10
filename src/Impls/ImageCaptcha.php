@@ -28,7 +28,7 @@ class ImageCaptcha implements CaptchaInterface
     /**
      * @return array{sensitive:bool, key:string, img:string}
      */
-    public function acquire()
+    public function acquire($options = null): array
     {
         return $this->captcha->create($this->type, true);
     }

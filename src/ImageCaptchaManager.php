@@ -1,11 +1,11 @@
 <?php
 
-namespace Oh86\Captcha\Impls;
+namespace Oh86\Captcha;
 
 use Illuminate\Support\Manager;
-use Oh86\Captcha\CaptchaInterface;
+use Oh86\Captcha\Impls\ImageCaptcha;
 
-class ImageCaptchaManager extends Manager implements CaptchaInterface
+class ImageCaptchaManager extends Manager
 {
     public function getDefaultDriver()
     {
@@ -50,23 +50,5 @@ class ImageCaptchaManager extends Manager implements CaptchaInterface
             $this->container,
             'inverse'
         );
-    }
-
-
-    /**
-     * @return array{sensitive:bool, key:string, img:string}
-     */
-    public function acquire()
-    {
-        return $this->driver()->acquire();
-    }
-
-    /**
-     * @param array{key:string, value:string} $captcha
-     * @return bool
-     */
-    public function verify($captcha): bool
-    {
-        return $this->driver()->verify($captcha);
     }
 }
