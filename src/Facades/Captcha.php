@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Oh86\Captcha\CaptchaInterface driver($driver = null)
  * @method static mixed acquire($options = null)
  * @method static bool verify($captcha)
+ * 
+ * @see \Oh86\Captcha\CaptchaManager
  */
 class Captcha extends Facade
 {
