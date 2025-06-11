@@ -7,15 +7,15 @@ return [
     'default' => env('CAPTCHA_DEFAULT_DRIVER', 'image'),
 
     'image' => [
-        'type' => 'default',
+        'type' => 'default',    // 默认验证码类型，default|math|flat|mini|inverse
         'characters' => ['2', '3', '4', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'm', 'n', 'p', 'q', 'r', 't', 'u', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'M', 'N', 'P', 'Q', 'R', 'T', 'U', 'X', 'Y', 'Z'],
         'default' => [
-            'length' => 4,
+            'length' => 4,          // 验证码长度
             'width' => 120,
             'height' => 36,
             'quality' => 90,
-            'math' => false,
-            'expire' => 600,
+            'expire' => 600,        // 过期时间，单位为秒
+            'sensitive' => false,   // 是否区分大小写
             'encrypt' => false,
         ],
         'math' => [
