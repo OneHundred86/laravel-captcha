@@ -9,14 +9,14 @@ class ImageCaptchaManager extends Manager
 {
     public function getDefaultDriver()
     {
-        return $this->config->get('captcha.image.type', 'default');
+        return $this->config->get('captcha.image.default', 'normal');
     }
 
-    protected function createDefaultDriver()
+    protected function createNormalDriver()
     {
         return new ImageCaptcha(
             $this->container,
-            'default'
+            'normal'
         );
     }
 
@@ -25,30 +25,6 @@ class ImageCaptchaManager extends Manager
         return new ImageCaptcha(
             $this->container,
             'math'
-        );
-    }
-
-    protected function createFlatDriver()
-    {
-        return new ImageCaptcha(
-            $this->container,
-            'flat'
-        );
-    }
-
-    protected function createMiniDriver()
-    {
-        return new ImageCaptcha(
-            $this->container,
-            'mini'
-        );
-    }
-
-    protected function createInverseDriver()
-    {
-        return new ImageCaptcha(
-            $this->container,
-            'inverse'
         );
     }
 }

@@ -11,7 +11,7 @@ class ImageCaptcha implements CaptchaInterface
     private Captcha $captcha;
     private string $type;
 
-    public function __construct(Application $app, string $type = 'default')
+    public function __construct(Application $app, string $type)
     {
         $this->captcha = new Captcha(
             $app->get('Illuminate\Filesystem\Filesystem'),
