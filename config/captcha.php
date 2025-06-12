@@ -14,6 +14,7 @@ return [
             'expire' => 600,        // 过期时间，单位为秒
             'sensitive' => false,   // 是否区分大小写
             'encrypt' => false,
+            'lines' => 1,           // 干扰线数量
         ],
         'math' => [
             'length' => 9,  // 数学式子长度，此处固定为9

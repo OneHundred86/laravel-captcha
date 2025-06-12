@@ -17,6 +17,7 @@ return [
             'expire' => 600,        // 过期时间，单位为秒
             'sensitive' => false,   // 是否区分大小写
             'encrypt' => false,
+            'lines' => 1,           // 干扰线数量
         ],
         'math' => [
             'length' => 9,  // 数学式子长度，此处固定为9
@@ -40,13 +41,11 @@ use Oh86\Captcha\Facades\Captcha;
 // 获取
 $captcha = Captcha::acquire();
 $captcha = Captcha::driver('image')->acquire();
-$captcha = Captcha::driver('image')->driver('default')->acquire();
 $captcha = Captcha::driver('image')->driver('math')->acquire();
 
 // 验证
 Captcha::verify(['key' => $captcha['key'], 'value' => 'abcd']);
 Captcha::driver('image')->verify(['key' => $captcha['key'], 'value' => 'abcd']);
-Captcha::driver('image')->driver('default')->verify(['key' => $captcha['key'], 'value' => 'abcd']);
 Captcha::driver('image')->driver('math')->verify(['key' => $captcha['key'], 'value' => '20']);
 ```
 
@@ -81,7 +80,7 @@ trait CaptchaTrait
 
         if ($captchaType == 'image'){
             $request->validate([
-                'captcha.type' => 'nullable',   // default,math,flat,mini,inverse
+                'captcha.type' => 'nullable',   // normal,math
                 'captcha.key' => 'required',
                 'captcha.value' => 'required',
             ]);
