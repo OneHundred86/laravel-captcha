@@ -4,29 +4,27 @@
 
 ```php
 return [
-    'default' => env('CAPTCHA_DEFAULT_DRIVER', 'image'),
+    'default' => env('CAPTCHA_DEFAULT_DRIVER', 'normalImage'),
 
-    'image' => [
-        'default' => 'normal',    // 默认验证码类型，normal | math
+    'normalImage' => [
         'characters' => ['2', '3', '4', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'm', 'n', 'p', 'q', 'r', 't', 'u', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'M', 'N', 'P', 'Q', 'R', 'T', 'U', 'X', 'Y', 'Z'],
-        'normal' => [
-            'length' => 4,          // 验证码长度
-            'width' => 120,
-            'height' => 36,
-            'quality' => 90,
-            'expire' => 600,        // 过期时间，单位为秒
-            'sensitive' => false,   // 是否区分大小写
-            'encrypt' => false,
-            'lines' => 1,           // 干扰线数量
-        ],
-        'math' => [
-            'length' => 9,  // 数学式子长度，此处固定为9
-            'width' => 120,
-            'height' => 36,
-            'quality' => 90,
-            'math' => true,
-            'expire' => 600,
-        ],
+        'length' => 4,          // 验证码长度
+        'width' => 120,
+        'height' => 36,
+        'quality' => 90,
+        'expire' => 600,        // 过期时间，单位为秒
+        'sensitive' => false,   // 是否区分大小写
+        'encrypt' => false,
+        'lines' => 1,           // 干扰线数量
+    ],
+
+    'mathImage' => [
+        'length' => 9,  // 数学式子长度，此处固定为9
+        'width' => 120,
+        'height' => 36,
+        'quality' => 90,
+        'math' => true,
+        'expire' => 600,
     ],
 ];
 ```
@@ -40,13 +38,11 @@ use Oh86\Captcha\Facades\Captcha;
 
 // 获取
 $captcha = Captcha::acquire();
-$captcha = Captcha::driver('image')->acquire();
-$captcha = Captcha::driver('image')->driver('math')->acquire();
+$captcha = Captcha::driver('mathImage')->acquire();
 
 // 验证
 Captcha::verify(['key' => $captcha['key'], 'value' => 'abcd']);
-Captcha::driver('image')->verify(['key' => $captcha['key'], 'value' => 'abcd']);
-Captcha::driver('image')->driver('math')->verify(['key' => $captcha['key'], 'value' => '20']);
+Captcha::driver('mathImage')->verify(['key' => $captcha['key'], 'value' => '25']);
 ```
 
 #### 2.验证验证码
@@ -71,33 +67,28 @@ trait CaptchaTrait
             'captcha' => 'required|array',
         ]);
 
-        // 本地环境不校验
-        if (config('app.env') == 'local') {
-            return;
-        }
-
         $captchaType = $request->captcha_type ?? Captcha::getDefaultDriver();
+        $captcha = $request->captcha;
 
-        if ($captchaType == 'image'){
+        if ($captchaType == 'normalImage' || $captchaType == 'mathImage'){
             $request->validate([
-                'captcha.type' => 'nullable',   // normal,math
                 'captcha.key' => 'required',
                 'captcha.value' => 'required',
             ]);
-
-            if (!Captcha::driver('image')->driver($request->captcha['type'] ?? null)->verify($request->captcha)) {
-                throw new ErrorCodeException(ErrorCode::Error, '验证码错误');
-            }
-            return;
         } elseif ($captchaType == 'tencentCloud') {
             $request->validate([
                 'captcha.ticket' => 'required',
                 'captcha.randStr' => 'required',
             ]);
 
-            $captcha = ['userIp' => $request->ip()] + $request->captcha;
+            $captcha = ['userIp' => $request->ip()] + $captcha;
         } else {
             throw new ErrorCodeException(ErrorCode::Error, '验证码类型不支持');
+        }
+        
+        // 本地环境不校验
+        if (config('app.env') == 'local') {
+            return;
         }
 
         if (!Captcha::driver($request->captcha_type)->verify($captcha)) {

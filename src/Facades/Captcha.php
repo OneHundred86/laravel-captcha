@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool verify($captcha)
  * 
  * @see \Oh86\Captcha\CaptchaManager
+ * @see \Oh86\Captcha\CaptchaInterface
  */
 class Captcha extends Facade
 {

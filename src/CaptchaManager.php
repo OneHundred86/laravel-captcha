@@ -2,8 +2,8 @@
 
 namespace Oh86\Captcha;
 
-use Oh86\Captcha\ImageCaptchaManager;
 use Illuminate\Support\Manager;
+use Oh86\Captcha\Captchas\ImageCaptcha;
 
 class CaptchaManager extends Manager
 {
@@ -12,8 +12,15 @@ class CaptchaManager extends Manager
         return $this->config->get('captcha.default');
     }
 
-    public function createImageDriver()
+    public function createNormalImageDriver()
     {
-        return new ImageCaptchaManager($this->container);
+        $config = $this->config->get('captcha.normalImage');
+        return new ImageCaptcha($this->container, $config);
+    }
+
+    public function createMathImageDriver()
+    {
+        $config = $this->config->get('captcha.mathImage');
+        return new ImageCaptcha($this->container, $config);
     }
 }

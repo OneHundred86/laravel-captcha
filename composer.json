@@ -25,6 +25,9 @@
         "laravel": {
             "providers": [
                 "Oh86\\Captcha\\CaptchaServiceProvider"
+            ],
+            "dont-discover": [
+                "mews/captcha"
             ]
         }
     }

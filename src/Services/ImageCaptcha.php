@@ -3,51 +3,33 @@
 namespace Oh86\Captcha\Services;
 
 use Mews\Captcha\Captcha;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Hashing\BcryptHasher as Hasher;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
-use Illuminate\Session\Store as Session;
+use Illuminate\Contracts\Container\Container as Application;
 
 class ImageCaptcha extends Captcha
 {
-    private const ConfigKeyPrefix = 'captcha.image.';
+    public function __construct(Application $app, array $config)
+    {
+        parent::__construct(
+            $app->get('Illuminate\Filesystem\Filesystem'),
+            $app->get('Illuminate\Contracts\Config\Repository'),
+            $app->get('Intervention\Image\ImageManager'),
+            $app->get('Illuminate\Session\Store'),
+            $app->get('Illuminate\Hashing\BcryptHasher'),
+            $app->get('Illuminate\Support\Str')
+        );
 
-    /**
-     * Constructor
-     *
-     * @param Filesystem $files
-     * @param Repository $config
-     * @param ImageManager $imageManager
-     * @param Session $session
-     * @param Hasher $hasher
-     * @param Str $str
-     */
-    public function __construct(
-        Filesystem $files,
-        Repository $config,
-        ImageManager $imageManager,
-        Session $session,
-        Hasher $hasher,
-        Str $str
-    ) {
-        parent::__construct($files, $config, $imageManager, $session, $hasher, $str);
-
-        $this->characters = $config->get(self::ConfigKeyPrefix . 'characters', ['1', '2', '3', '4', '6', '7', '8', '9']);
+        // 配置
+        foreach ($config as $key => $val) {
+            $this->{$key} = $val;
+        }
     }
 
     /**
-     * @override 
-     * @param string $config
-     * @return void
+     * do nothing
+     * @override
      */
     protected function configure($config)
     {
-        if ($this->config->has(self::ConfigKeyPrefix . $config)) {
-            foreach ($this->config->get(self::ConfigKeyPrefix . $config) as $key => $val) {
-                $this->{$key} = $val;
-            }
-        }
+        return;
     }
 }
